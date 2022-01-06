@@ -7,12 +7,25 @@ import './App.css'
 function App() {
   // Use initialEmails for state
   const [emails, setEmails] = useState(initialEmails)
+  const [hideRead, setHideRead] = useState(false)
   console.log(initialEmails)
 
   function toggleRead (email){
     return !email.read 
 
   }
+
+  function toggleHideRead() {
+    setHideRead(!hideRead);
+  }
+  
+    let emailsToDisplay = emails
+    if(hideRead === true){
+      emailsToDisplay= emailsToDisplay.filter( function(email) {
+        return !email.read
+      })
+    }
+  
   function updateEmailRead (id, read){
     const findIndex = emails.findIndex( function (email){
       return email.id === id
@@ -59,14 +72,17 @@ function App() {
             <input
               id="hide-read"
               type="checkbox"
-              checked={false}
-              // onChange={() => {}}
+              checked={hideRead}
+              onChange={() => {toggleHideRead()
+              
+              }}
+
             />
           </li>
         </ul>
       </nav>
       <main className="emails">{
-        emails.map(function (email){
+          emailsToDisplay.map(function (email){
           return (
             <li className={email.read ? "email read" : "email unread"} > 
             <input type="checkbox" onClick = {function (){
